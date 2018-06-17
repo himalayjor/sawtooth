@@ -1,0 +1,14 @@
+{
+  "name": "simplecounter",
+  "version": "1.0.0",
+  "description": "simple counter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "himalayj",
+  "license": "ISC",
+  "dependencies": {
+    "sawtooth-sdk": "1.0.4"
+  }
+}
