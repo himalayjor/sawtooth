@@ -36,6 +36,36 @@ const createAsset = (asset, owner, state) => {
       })
   }
 
+  // Add a new transfer to state
+const incrementAsset = (asset, signer, state) => {
+  const address = getOwnerAddress(asset)
+  const countAddress = getCounterAddress(asset)
+
+  return state.get([address])
+    .then(entries => {
+      const entry = entries[address]
+      if (!entry || entry.length === 0) {
+        throw new InvalidTransaction('Asset does not exist')
+      }
+
+      if (signer !== decode(entry).owner) {
+        throw new InvalidTransaction('Only an Asset\'s owner can increase asset')
+      }
+      // get currentCount
+      return state.get([countAddress])
+    }).then(entries => {
+        const entry = entries[countAddress];
+
+        if (!entry) return Promise.resolve(0);
+        return Promise.resolve(decode(entry).count);
+    }).then(currentCount => {
+        // increment count
+        return state.set({
+          [countAddress]: encode({count: (currentCount + 1)})
+        })
+    });
+}
+
 // Handler for JSON encoded payloads
 class JSONHandler extends TransactionHandler {
     constructor () {
@@ -47,9 +77,10 @@ class JSONHandler extends TransactionHandler {
       // Parse the transaction header and payload
       const header = TransactionHeader.decode(txn.header)
       const signer = header.signerPubkey
-      const { action, asset, owner } = JSON.parse(txn.payload)
+      const { action, asset } = JSON.parse(txn.payload)
   
       if (action === 'createAsset') return createAsset(asset, signer, state)
+      else if (action == 'incrementAsset') return incrementAsset(asset, signer, state)
 
       return Promise.resolve().then(() => {
         throw new InvalidTransaction(
