@@ -1,7 +1,7 @@
 'use strict'
 
 const { createHash } = require('crypto');
-const { TransactionHandler } = require('sawtooth-sdk/processor/handler');
+const { TransactionHandler } = require('sawtooth-sdk/processor');
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 const { TransactionHeader } = require('sawtooth-sdk/protobuf');
 

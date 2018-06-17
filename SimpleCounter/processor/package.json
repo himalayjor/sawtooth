@@ -9,6 +9,6 @@
   "author": "himalayj",
   "license": "ISC",
   "dependencies": {
-    "sawtooth-sdk": "1.0.4"
+    "sawtooth-sdk": "0.8.1"
   }
 }
