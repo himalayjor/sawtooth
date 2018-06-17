@@ -40,7 +40,7 @@ const createAsset = (asset, owner, state) => {
 class JSONHandler extends TransactionHandler {
     constructor () {
       console.log('Initializing JSON handler for Simple Counter')
-      super(FAMILY, ['0.0'], [PREFIX])
+      super(FAMILY, '1.0.0', 'application/json', [PREFIX])
     }
   
     apply (txn, state) {
