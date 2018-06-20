@@ -1,22 +1,17 @@
 {
-  "name": "simplecounter_react_counter",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/himalayjor/sawtooth.git"
-  },
-  "author": "himalayjoriwal@gmail.com",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/himalayjor/sawtooth/issues"
-  },
-  "homepage": "https://github.com/himalayjor/sawtooth#readme",
+  "name": "sawtooth_client",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "1.1.4",
     "sawtooth-sdk": "0.8.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }
