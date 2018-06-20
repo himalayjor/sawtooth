@@ -1,0 +1,22 @@
+{
+  "name": "simplecounter_react_counter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/himalayjor/sawtooth.git"
+  },
+  "author": "himalayjoriwal@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/himalayjor/sawtooth/issues"
+  },
+  "homepage": "https://github.com/himalayjor/sawtooth#readme",
+  "dependencies": {
+    "sawtooth-sdk": "0.8.1"
+  }
+}
