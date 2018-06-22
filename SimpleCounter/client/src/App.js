@@ -6,43 +6,57 @@ const {
   BatchEncoder,
   TransactionEncoder
 } = require('sawtooth-sdk/client');
+var request = require('request');
 
 const privateKey = "63769fa8776a8ec66e7ec98d74ae70ed1497e890c824ce320ef56c9356721483";
 const publicKey = "02b87e4069985b34e414f6d090819a00371d523e98fd29bca0da7f6ec7910dd51a";
 
 const PREFIX = 'bf4e85';
+const FAMILY = 'simple-counter';
+const VERSION = '1.0.0';
 
-// Submit signed Transaction to validator
-// const submitUpdate = (payload, privateKey, cb) => {
-//   const transaction = new TransactionEncoder(privateKey, {
-//     inputs: [PREFIX],
-//     outputs: [PREFIX],
-//     familyName: FAMILY,
-//     familyVersion: VERSION,
-//     payloadEncoding: 'application/json',
-//     payloadEncoder: p => Buffer.from(JSON.stringify(p))
-//   }).create(payload)
+const API_URL = 'http://sawtooth-counter-rest-api-1412363039.us-west-2.elb.amazonaws.com';
 
-//   const batchBytes = new BatchEncoder(privateKey).createEncoded(transaction)
+// request(`${API_URL}/state`,  function (error, response, body) {
+//  console.log(response);
+//  console.log(error);
+//  console.log(body);
+// });
 
-  var myInit = { method: 'GET' };
+//Submit signed Transaction to validator
+const submitUpdate = (payload, privateKey) => {
+  const transaction = new TransactionEncoder(privateKey, {
+    inputs: [PREFIX],
+    outputs: [PREFIX],
+    familyName: FAMILY,
+    familyVersion: VERSION,
+    payloadEncoding: 'application/json',
+    payloadEncoder: p => Buffer.from(JSON.stringify(p))
+  }).create(payload);
 
-var myRequest = new Request('localhost:8008/state');
+  const batchBytes = new BatchEncoder(privateKey).createEncoded(transaction)
 
-fetch(myRequest,myInit).then(function(response) {
+  console.log('something');
+
+request({
+ 
+  uri: `${API_URL}/batches?wait`,
+  body: batchBytes,
+  method: 'POST'
+}, function (error, response, body) {
+  console.log('HelloWorld');
   console.log(response);
-});
+  console.log(error);
+  console.log(body);
+ });
+};
 
-//   $.post({
-//     url: `${API_URL}/batches?wait`,
-//     data: batchBytes,
-//     headers: {'Content-Type': 'application/octet-stream'},
-//     processData: false,
-//     // Any data object indicates the Batch was not committed
-//     success: ({ data }) => cb(!data),
-//     error: () => cb(false)
-//   })
-// }
+const payload = {
+  action: 'createAsset',
+  asset: 'FirstAsset'
+};
+
+submitUpdate(payload, privateKey);
 
 class App extends Component {
   render() {
