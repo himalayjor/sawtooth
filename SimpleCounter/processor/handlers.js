@@ -32,7 +32,7 @@ const createAsset = (asset, owner, state) => {
         }
   
         return state.set({
-          [address]: encode({count: 0})
+          [address]: encode({name: asset, count: 0})
         })
       })
   }
@@ -52,7 +52,7 @@ const incrementAsset = (asset, signer, state) => {
     }).then(currentCount => {
         // increment count
         return state.set({
-          [address]: encode({count: (currentCount + 1)})
+          [address]: encode({name: asset, count: (currentCount + 1)})
         })
     });
 }
