@@ -13,15 +13,16 @@ const getAddress = (key, length = 64) => {
 const FAMILY = 'simple-counter';
 const PREFIX = getAddress(FAMILY, 6);
 
-const getCounterAddress = name => PREFIX + '00' + getAddress(name, 62);
-const getOwnerAddress = name => PREFIX + '01' + getAddress(name, 62);
+const getBlockChainAddress = (owner, asset) => {
+  return PREFIX + getAddress(owner, 6) + getAddress(asset, 58);
+};
 
 const encode = obj => Buffer.from(JSON.stringify(obj, Object.keys(obj).sort()));
 const decode = buf => JSON.parse(buf.toString());
 
 // Add a new asset to state
 const createAsset = (asset, owner, state) => {
-    const address = getOwnerAddress(asset)
+    const address = getBlockChainAddress(owner, asset)
   
     return state.get([address])
       .then(entries => {
@@ -31,15 +32,14 @@ const createAsset = (asset, owner, state) => {
         }
   
         return state.set({
-          [address]: encode({name: asset, owner})
+          [address]: encode({count: 0})
         })
       })
   }
 
   // Add a new transfer to state
 const incrementAsset = (asset, signer, state) => {
-  const address = getOwnerAddress(asset)
-  const countAddress = getCounterAddress(asset)
+  const address = getBlockChainAddress(signer, asset);
 
   return state.get([address])
     .then(entries => {
@@ -47,21 +47,12 @@ const incrementAsset = (asset, signer, state) => {
       if (!entry || entry.length === 0) {
         throw new InvalidTransaction('Asset does not exist')
       }
-
-      if (signer !== decode(entry).owner) {
-        throw new InvalidTransaction('Only an Asset\'s owner can increase asset')
-      }
       // get currentCount
-      return state.get([countAddress])
-    }).then(entries => {
-        const entry = entries[countAddress];
-
-        if (!entry) return Promise.resolve(0);
-        return Promise.resolve(decode(entry).count);
+      return Promise.resolve(decode(entry).count);
     }).then(currentCount => {
         // increment count
         return state.set({
-          [countAddress]: encode({count: (currentCount + 1)})
+          [address]: encode({count: (currentCount + 1)})
         })
     });
 }
